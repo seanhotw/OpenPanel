@@ -10,74 +10,78 @@ using OpenPanel.ViewModels;
 
 namespace OpenPanelApp
 {
-    public class TopicListViewController : MvxTouchViewController<TopicListViewModel>
-    {
-        public UITableView TableView { get; set; }
+	public class TopicListViewController : MvxTouchViewController<TopicListViewModel>
+	{
+		public UITableView TableView { get; set; }
 
-        public TopicListViewController(MvxShowViewModelRequest request) : base(request)
-        {
-        }
+		public TopicListViewController (MvxShowViewModelRequest request) : base(request)
+		{
+		}
 
-        public override void LoadView()
-        {
-            base.LoadView();
+		public override void LoadView ()
+		{
+			base.LoadView ();
 
-            TableView = new UITableView(RectangleF.Empty, UITableViewStyle.Plain)
+			TableView = new UITableView (RectangleF.Empty, UITableViewStyle.Plain)
             {
                 Frame = this.ContentFrame(),
-                Source = new TopicsTableSource(),
                 RowHeight = 60
             };
-            View.AddSubview(TableView);
-        }
+			TableView.Source = new TableSource (this);
+			View.AddSubview (TableView);
+		}
 
-        public override void ViewDidLoad()
-        {
-            base.ViewDidLoad();
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
 
-            ViewModel.PropertyChanged += (sender, e) =>
-            {
-                if (e.PropertyName == "Topics")
-                {
-                    ((TopicsTableSource)TableView.Source).Topics = ViewModel.Topics;
-                    TableView.ReloadData();
-                }
-            };
-            ViewModel.Search();
-        }
-    }
+			ViewModel.PropertyChanged += (sender, e) =>
+			{
+				if (e.PropertyName == "Topics") {
+					((TableSource)TableView.Source).Topics = ViewModel.Topics;
+					TableView.ReloadData ();
+				}
+			};
+			ViewModel.Search ();
+		}
 
-    public class TopicsTableSource : UITableViewSource
-    {
-        private static string CellId = "DefaultCellId";
-        public List<Topic> Topics { get; set; }
+		class TableSource : UITableViewSource
+		{
+			private static string CellId = "DefaultCellId";
 
-        public TopicsTableSource()
-        {
-            Topics = new List<Topic>();
-        }
+			public List<Topic> Topics { get; set; }
 
-        public override int RowsInSection(UITableView tableview, int section)
-        {
-            return Topics.Count;
-        }
+			private TopicListViewController controller;
 
-        public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
-        {
-            var cell = tableView.DequeueReusableCell(CellId) ?? new UITableViewCell(UITableViewCellStyle.Subtitle, CellId);
+			public TableSource (TopicListViewController controller)
+			{
+				Topics = new List<Topic> ();
+				this.controller = controller;
+			}
 
-            var topic = Topics[indexPath.Row];
+			public override int RowsInSection (UITableView tableview, int section)
+			{
+				return Topics.Count;
+			}
 
-            cell.TextLabel.Text = topic.Title;
-            cell.DetailTextLabel.Text = topic.CreatedBy.Name;
+			public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
+			{
+				var cell = tableView.DequeueReusableCell (CellId) ?? new UITableViewCell (UITableViewCellStyle.Subtitle, CellId);
 
-            return cell;
-        }
+				var topic = Topics [indexPath.Row];
 
-        public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-        {
-            tableView.DeselectRow(indexPath, true);
-        }
-    }
+				cell.TextLabel.Text = topic.Question;
+				cell.DetailTextLabel.Text = topic.CreatedBy.Name;
+				cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
+				return cell;
+			}
+
+			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
+			{
+				var detailsController = new TopicDetailsViewController (Topics [indexPath.Row]);
+				controller.NavigationController.PushViewController (detailsController, true);       
+			}
+		}
+	}
 }
 

@@ -92,16 +92,17 @@
     <Compile Include="Controllers\TopicListViewController.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Extensions\UIViewControllerExtensions.cs" />
+    <Compile Include="Controllers\TopicDetailsViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenPanel\OpenPanel.iOS.csproj">
       <Project>{1B2A9FEB-12D8-44FB-849B-BAF6647A8E8D}</Project>
       <Name>OpenPanel.iOS</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>

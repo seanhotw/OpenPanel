@@ -46,9 +46,9 @@
   <ItemGroup>
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Topic.cs" />
-    <Compile Include="Models\Opinion.cs" />
     <Compile Include="App.cs" />
     <Compile Include="AppContext.cs" />
     <Compile Include="ViewModels\TopicListViewModel.cs" />
+    <Compile Include="Models\Answer.cs" />
   </ItemGroup>
 </Project>

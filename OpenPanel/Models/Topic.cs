@@ -5,10 +5,10 @@ namespace OpenPanel.Models
 {
     public class Topic
     {
-        public string Title { get; set; }
+        public string Question { get; set; }
         public User CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
-        public List<Opinion> Opinions { get; set; }
+        public List<Answer> Answers { get; set; }
 
         public Topic()
         {

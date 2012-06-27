@@ -38,13 +38,13 @@ namespace OpenPanel.ViewModels
 
             var topic = new Topic()
             {
-                Title = "",
+                Question = "Is it a Question?",
                 CreatedAt = DateTime.Now,
                 CreatedBy = new User() { Name = "Tester" },
-                Opinions = new List<Opinion>()
+                Answers = new List<Answer>()
                 {
-                    new Opinion() { Text = "Yes", Votes = 10 },
-                    new Opinion() { Text = "No", Votes = 5 }
+                    new Answer() { Text = "Yes", Votes = 10 },
+                    new Answer() { Text = "No", Votes = 5 }
                 }
             };
             Success(new List<Topic>() { topic });
