@@ -7,17 +7,19 @@ using MonoTouch.UIKit;
 using MonoTouch.Foundation;
 using OpenPanel.Models;
 using OpenPanel.ViewModels;
+
 namespace OpenPanelApp
 {
 	public class TopicDetailsViewController : UIViewController
 	{
-		public Topic Topic { get; set;}
+		public Topic Topic { get; set; }
+
 		public UITableView TableView { get; set; }
 
 		public TopicDetailsViewController (Topic topic)
 		{
 			Topic = topic;
-			Title = topic.CreatedBy.Name;;
+			Title = topic.CreatedBy.Name;
 		}
 
 		public override void LoadView ()
@@ -34,31 +36,10 @@ namespace OpenPanelApp
 				Frame = this.ContentFrame()
 			};
 			TableView.Source = new TableSource () {
-				Topic = this.Topic
+				Topic = this.Topic,
+				Controller = this
 			};
-//			TableView.Topic = Topic;
 			View.AddSubview (TableView);
-		}
-
-		private UIButton makeVoteButton ()
-		{
-			UIButton btnVote = UIButton.FromType(UIButtonType.RoundedRect);
-	   		btnVote.Frame = new RectangleF(100f, 100f, 100f, 100f);
-   			btnVote.SetTitle("Vote!", UIControlState.Normal);
-			btnVote.TouchUpInside += (sender, e) => {
-				var a = makeActionSheet();
-				a.ShowInView(this.View);
-			};
-
-			return btnVote;
-		}
-
-		private UIActionSheet makeActionSheet ()
-		{
-			string[] actions = new string[] { "Yes", "No" };
-
-			UIActionSheet actionsSheet = new UIActionSheet("Your vote?",null,"Cancel",null,actions);
-			return actionsSheet;
 		}
 
 		class TableSource : UITableViewSource
@@ -68,6 +49,7 @@ namespace OpenPanelApp
 			private const string AnswerCellId = "AnswerCellId";
 
 			public Topic Topic { set; get; }
+			public TopicDetailsViewController Controller { set; get; }
 
 			private const int NbOfSections = 3;
 			private const int CreatorSection = 0;
@@ -91,6 +73,7 @@ namespace OpenPanelApp
 				else
 					return String.Empty;
 			}
+
 			public override int RowsInSection (UITableView tableview, int section)
 			{
 				int nbOfRows = 0;
@@ -118,27 +101,27 @@ namespace OpenPanelApp
 				UITableViewCell cell = null;
 				switch (indexPath.Section) {
 				case CreatorSection:
-					cell = MakeCell(tableView, CreatorCellId);
-					switch(indexPath.Row) {
+					cell = MakeCell (tableView, CreatorCellId);
+					switch (indexPath.Row) {
 					case 0:
 						cell.TextLabel.Text = "Name";
 						cell.DetailTextLabel.Text = Topic.CreatedBy.Name;
 						break;
 					case 1:
 						cell.TextLabel.Text = "Created at";
-						cell.DetailTextLabel.Text = Topic.CreatedAt.ToString();
+						cell.DetailTextLabel.Text = Topic.CreatedAt.ToString ();
 						break;
 					}
 					break;
 				case QuestionSection:
-					cell = MakeCell(tableView, CreatorCellId);
+					cell = MakeCell (tableView, CreatorCellId);
 					cell.TextLabel.Text = "Question";
 					cell.DetailTextLabel.Text = Topic.Question;
 					break;
 				case AnswersSection:
-					cell = MakeCellForAnswer(tableView, CreatorCellId);
-					cell.TextLabel.Text = Topic.Answers[indexPath.Row].Text;
-					cell.DetailTextLabel.Text = Topic.Answers[indexPath.Row].Votes.ToString();
+					cell = MakeCellForAnswer (tableView, CreatorCellId);
+					cell.TextLabel.Text = Topic.Answers [indexPath.Row].Text;
+					cell.DetailTextLabel.Text = Topic.Answers [indexPath.Row].Votes.ToString ();
 					break;
 				}
 
@@ -148,10 +131,12 @@ namespace OpenPanelApp
 
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
-
+				if (indexPath.Section == AnswersSection) {
+					makeActionSheet(Topic.Answers[indexPath.Row].Text).ShowInView(Controller.View);
+				}
 			}
 
-			private UITableViewCell MakeCell(UITableView tableView, string reuseidentifier)
+			private UITableViewCell MakeCell (UITableView tableView, string reuseidentifier)
 			{
 				return tableView.DequeueReusableCell (reuseidentifier) ?? new UITableViewCell (UITableViewCellStyle.Value2, reuseidentifier);
 			}
@@ -159,6 +144,21 @@ namespace OpenPanelApp
 			private UITableViewCell MakeCellForAnswer (UITableView tableView, string reuseidentifier)
 			{
 				return tableView.DequeueReusableCell (reuseidentifier) ?? new UITableViewCell (UITableViewCellStyle.Value1, reuseidentifier);
+			}
+
+			private UIActionSheet makeActionSheet (string answer)
+			{
+				string[] actions = new string[] { "Vote!" };
+
+				UIActionSheet actionSheet = new UIActionSheet ("Vote for " + answer + " ?", null, "Cancel", null, actions);
+				actionSheet.Clicked += delegate(object sender, UIButtonEventArgs e) { 
+                    switch (e.ButtonIndex) { 
+                    case 0: 
+                             
+                    	break; 
+                    } 
+				};
+				return actionSheet;
 			}
 		}
 
