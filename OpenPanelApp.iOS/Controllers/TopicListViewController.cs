@@ -16,6 +16,7 @@ namespace OpenPanelApp
 
 		public TopicListViewController (MvxShowViewModelRequest request) : base(request)
 		{
+			Title = "Topics";
 		}
 
 		public override void LoadView ()
