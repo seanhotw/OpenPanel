@@ -72,7 +72,7 @@ namespace OpenPanelApp
 				var topic = Topics [indexPath.Row];
 
 				cell.TextLabel.Text = topic.Question;
-				cell.DetailTextLabel.Text = topic.CreatedBy.Name;
+				cell.DetailTextLabel.Text = topic.User.Name;
 				cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 				return cell;
 			}

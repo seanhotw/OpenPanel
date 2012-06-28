@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cirrious.MvvmCross.ExtensionMethods;
+using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 using Cirrious.MvvmCross.ViewModels;
 using OpenPanel.Models;
+using OpenPanel.Services;
 
 namespace OpenPanel.ViewModels
 {
-    public class TopicListViewModel : MvxViewModel
+    public class TopicListViewModel : MvxViewModel, IMvxServiceConsumer<IOpenPanelService>
     {
         #region Properties
 
@@ -36,18 +39,7 @@ namespace OpenPanel.ViewModels
             if (IsSearching) return;
             IsSearching = true;
 
-            var topic = new Topic()
-            {
-                Question = "Is it a Question?",
-                CreatedAt = DateTime.Now,
-                CreatedBy = new User() { Name = "Tester" },
-                Answers = new List<Answer>()
-                {
-                    new Answer() { Text = "Yes", Votes = 10 },
-                    new Answer() { Text = "No", Votes = 5 }
-                }
-            };
-            Success(new List<Topic>() { topic });
+            OpenPanelService.GetTopicsAsync(Success, Error);
         }
 
         private void Error(Exception exception)
@@ -64,6 +56,11 @@ namespace OpenPanel.ViewModels
         {
             IsSearching = false;
             Topics = list.ToList();
+        }
+
+        private IOpenPanelService OpenPanelService
+        {
+            get { return this.GetService<IOpenPanelService>(); }
         }
     }
 }

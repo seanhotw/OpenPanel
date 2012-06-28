@@ -17,7 +17,7 @@ namespace OpenPanelApp
 		public TopicDetailsViewController (Topic topic)
 		{
 			Topic = topic;
-			Title = topic.CreatedBy.Name;;
+			Title = topic.User.Name;;
 		}
 
 		public override void LoadView ()
@@ -122,7 +122,7 @@ namespace OpenPanelApp
 					switch(indexPath.Row) {
 					case 0:
 						cell.TextLabel.Text = "Name";
-						cell.DetailTextLabel.Text = Topic.CreatedBy.Name;
+						cell.DetailTextLabel.Text = Topic.User.Name;
 						break;
 					case 1:
 						cell.TextLabel.Text = "Created at";
@@ -138,7 +138,7 @@ namespace OpenPanelApp
 				case AnswersSection:
 					cell = MakeCellForAnswer(tableView, CreatorCellId);
 					cell.TextLabel.Text = Topic.Answers[indexPath.Row].Text;
-					cell.DetailTextLabel.Text = Topic.Answers[indexPath.Row].Votes.ToString();
+					cell.DetailTextLabel.Text = Topic.Answers[indexPath.Row].Vote.ToString();
 					break;
 				}
 
