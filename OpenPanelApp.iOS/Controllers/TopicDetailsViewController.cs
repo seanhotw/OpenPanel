@@ -10,33 +10,29 @@ using OpenPanel.ViewModels;
 
 namespace OpenPanelApp
 {
-	public class TopicDetailsViewController : UIViewController
+	public class TopicDetailsViewController : MvxTouchViewController<TopicDetailsViewModel>
 	{
-		public Topic Topic { get; set; }
-
 		public UITableView TableView { get; set; }
 
-		public TopicDetailsViewController (Topic topic)
+		public TopicDetailsViewController (MvxShowViewModelRequest request) : base(request)
 		{
-			Topic = topic;
-			Title = topic.CreatedBy.Name;
+
 		}
 
 		public override void LoadView ()
 		{
 			base.LoadView ();
-
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-
+			Title = ViewModel.Topic.CreatedBy.Name;
 			TableView = new UITableView (RectangleF.Empty, UITableViewStyle.Grouped) {
 				Frame = this.ContentFrame()
 			};
 			TableView.Source = new TableSource () {
-				Topic = this.Topic,
+				ViewModel = this.ViewModel,
 				Controller = this
 			};
 			View.AddSubview (TableView);
@@ -48,7 +44,7 @@ namespace OpenPanelApp
 			private const string QuestionCellId = "QuestionCellId";
 			private const string AnswerCellId = "AnswerCellId";
 
-			public Topic Topic { set; get; }
+			public TopicDetailsViewModel ViewModel { set; get; }
 			public TopicDetailsViewController Controller { set; get; }
 
 			private const int NbOfSections = 3;
@@ -89,7 +85,7 @@ namespace OpenPanelApp
 					break;
 				case AnswersSection:
 					// nb of answers
-					nbOfRows = Topic.Answers.Count;
+					nbOfRows = ViewModel.Topic.Answers.Count;
 					break;
 				}
 
@@ -105,23 +101,23 @@ namespace OpenPanelApp
 					switch (indexPath.Row) {
 					case 0:
 						cell.TextLabel.Text = "Name";
-						cell.DetailTextLabel.Text = Topic.CreatedBy.Name;
+						cell.DetailTextLabel.Text = ViewModel.Topic.CreatedBy.Name;
 						break;
 					case 1:
 						cell.TextLabel.Text = "Created at";
-						cell.DetailTextLabel.Text = Topic.CreatedAt.ToString ();
+						cell.DetailTextLabel.Text = ViewModel.Topic.CreatedAt.ToString ();
 						break;
 					}
 					break;
 				case QuestionSection:
 					cell = MakeCell (tableView, CreatorCellId);
 					cell.TextLabel.Text = "Question";
-					cell.DetailTextLabel.Text = Topic.Question;
+					cell.DetailTextLabel.Text = ViewModel.Topic.Question;
 					break;
 				case AnswersSection:
 					cell = MakeCellForAnswer (tableView, CreatorCellId);
-					cell.TextLabel.Text = Topic.Answers [indexPath.Row].Text;
-					cell.DetailTextLabel.Text = Topic.Answers [indexPath.Row].Votes.ToString ();
+					cell.TextLabel.Text = ViewModel.Topic.Answers [indexPath.Row].Text;
+					cell.DetailTextLabel.Text = ViewModel.Topic.Answers [indexPath.Row].Votes.ToString ();
 					break;
 				}
 
@@ -132,7 +128,7 @@ namespace OpenPanelApp
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				if (indexPath.Section == AnswersSection) {
-					makeActionSheet(Topic.Answers[indexPath.Row].Text).ShowInView(Controller.View);
+					makeActionSheet(ViewModel.Topic.Answers[indexPath.Row].Text).ShowInView(Controller.View);
 				}
 			}
 

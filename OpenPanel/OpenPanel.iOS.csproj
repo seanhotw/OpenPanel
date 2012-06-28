@@ -37,6 +37,9 @@
     <Reference Include="CirriousMvvmCrossTouch">
       <HintPath>..\Libs\iOS\CirriousMvvmCrossTouch.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft_Json_MonoTouch">
+      <HintPath>..\Libs\iOS\Newtonsoft_Json_MonoTouch.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -50,5 +53,6 @@
     <Compile Include="AppContext.cs" />
     <Compile Include="ViewModels\TopicListViewModel.cs" />
     <Compile Include="Models\Answer.cs" />
+    <Compile Include="ViewModels\TopicDetailsViewModel.cs" />
   </ItemGroup>
 </Project>

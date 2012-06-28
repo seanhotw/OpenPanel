@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using OpenPanel.Models;
+using Newtonsoft.Json;
 
 namespace OpenPanel.ViewModels
 {
@@ -50,6 +51,11 @@ namespace OpenPanel.ViewModels
             Success(new List<Topic>() { topic });
         }
 
+		public void SelectTopic (Topic topic)
+		{
+			RequestNavigate<TopicDetailsViewModel>(new { topic = JsonConvert.SerializeObject(topic) });
+		}
+
         private void Error(Exception exception)
         {
             IsSearching = false;
@@ -65,6 +71,8 @@ namespace OpenPanel.ViewModels
             IsSearching = false;
             Topics = list.ToList();
         }
+
+
     }
 }
 

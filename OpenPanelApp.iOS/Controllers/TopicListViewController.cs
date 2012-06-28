@@ -28,18 +28,19 @@ namespace OpenPanelApp
                 Frame = this.ContentFrame(),
                 RowHeight = 60
             };
-			TableView.Source = new TableSource (this);
+			TableView.Source = new TableSource () {
+				ViewModel = this.ViewModel
+			};
 			View.AddSubview (TableView);
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-
 			ViewModel.PropertyChanged += (sender, e) =>
 			{
 				if (e.PropertyName == "Topics") {
-					((TableSource)TableView.Source).Topics = ViewModel.Topics;
+					((TableSource)TableView.Source).ViewModel = ViewModel;
 					TableView.ReloadData ();
 				}
 			};
@@ -50,26 +51,23 @@ namespace OpenPanelApp
 		{
 			private static string CellId = "DefaultCellId";
 
-			public List<Topic> Topics { get; set; }
+			public TopicListViewModel ViewModel {get; set;} 
 
-			private TopicListViewController controller;
-
-			public TableSource (TopicListViewController controller)
+			public TableSource ()
 			{
-				Topics = new List<Topic> ();
-				this.controller = controller;
 			}
 
 			public override int RowsInSection (UITableView tableview, int section)
 			{
-				return Topics.Count;
+				ViewModel.ToString();
+				return ViewModel.Topics.Count;
 			}
 
 			public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
 			{
 				var cell = tableView.DequeueReusableCell (CellId) ?? new UITableViewCell (UITableViewCellStyle.Subtitle, CellId);
 
-				var topic = Topics [indexPath.Row];
+				var topic = ViewModel.Topics [indexPath.Row];
 
 				cell.TextLabel.Text = topic.Question;
 				cell.DetailTextLabel.Text = topic.CreatedBy.Name;
@@ -79,8 +77,7 @@ namespace OpenPanelApp
 
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
-				var detailsController = new TopicDetailsViewController (Topics [indexPath.Row]);
-				controller.NavigationController.PushViewController (detailsController, true);       
+				ViewModel.SelectTopic(ViewModel.Topics[indexPath.Row]);
 			}
 		}
 	}
