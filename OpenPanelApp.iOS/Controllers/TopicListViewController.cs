@@ -22,16 +22,6 @@ namespace OpenPanelApp
 		public override void LoadView ()
 		{
 			base.LoadView ();
-
-			TableView = new UITableView (RectangleF.Empty, UITableViewStyle.Plain)
-            {
-                Frame = this.ContentFrame(),
-                RowHeight = 60
-            };
-			TableView.Source = new TableSource () {
-				ViewModel = this.ViewModel
-			};
-			View.AddSubview (TableView);
 		}
 
 		public override void ViewDidLoad ()
@@ -45,6 +35,16 @@ namespace OpenPanelApp
 				}
 			};
 			ViewModel.Search ();
+
+			TableView = new UITableView (RectangleF.Empty, UITableViewStyle.Plain)
+            {
+                Frame = this.ContentFrame(),
+                RowHeight = 60
+            };
+			TableView.Source = new TableSource () {
+				ViewModel = this.ViewModel
+			};
+			View.AddSubview (TableView);
 		}
 
 		class TableSource : UITableViewSource
@@ -59,7 +59,6 @@ namespace OpenPanelApp
 
 			public override int RowsInSection (UITableView tableview, int section)
 			{
-				ViewModel.ToString();
 				return ViewModel.Topics.Count;
 			}
 
