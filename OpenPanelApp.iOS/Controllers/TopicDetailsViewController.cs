@@ -36,6 +36,14 @@ namespace OpenPanelApp
 				Controller = this
 			};
 			View.AddSubview (TableView);
+
+			ViewModel.PropertyChanged += (sender, e) =>
+			{
+				if (e.PropertyName == "Topic") {
+					((TableSource)TableView.Source).ViewModel = ViewModel;
+					TableView.ReloadData ();
+				}
+			};
 		}
 
 		class TableSource : UITableViewSource
@@ -128,7 +136,7 @@ namespace OpenPanelApp
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				if (indexPath.Section == AnswersSection) {
-					makeActionSheet(ViewModel.Topic.Answers[indexPath.Row].Text).ShowInView(Controller.View);
+					makeActionSheet(ViewModel.Topic.Answers[indexPath.Row]).ShowInView(Controller.View);
 				}
 			}
 
@@ -142,15 +150,15 @@ namespace OpenPanelApp
 				return tableView.DequeueReusableCell (reuseidentifier) ?? new UITableViewCell (UITableViewCellStyle.Value1, reuseidentifier);
 			}
 
-			private UIActionSheet makeActionSheet (string answer)
+			private UIActionSheet makeActionSheet (Answer answer)
 			{
 				string[] actions = new string[] { "Vote!" };
 
-				UIActionSheet actionSheet = new UIActionSheet ("Vote for " + answer + " ?", null, "Cancel", null, actions);
+				UIActionSheet actionSheet = new UIActionSheet ("Vote for " + answer.Text + " ?", null, "Cancel", null, actions);
 				actionSheet.Clicked += delegate(object sender, UIButtonEventArgs e) { 
                     switch (e.ButtonIndex) { 
                     case 0: 
-                             
+						ViewModel.Vote(answer);     
                     	break; 
                     } 
 				};

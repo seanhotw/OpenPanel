@@ -25,6 +25,17 @@ namespace OpenPanel.ViewModels
 			Topic = JsonConvert.DeserializeObject<Topic>(topic);
 		}
 
+		public void Vote (Answer answer)
+		{
+			Answer result = topic.Answers.Find(delegate(Answer ans)
+			{
+				return ans.Text == answer.Text;
+			});
+			if (result != null) {
+				result.Votes++;
+				Topic = topic;
+			}
+		}
 	}
 }
 
