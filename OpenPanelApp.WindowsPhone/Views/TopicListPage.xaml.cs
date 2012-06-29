@@ -1,6 +1,5 @@
 ﻿using Cirrious.MvvmCross.WindowsPhone.Views;
 using OpenPanel.ViewModels;
-using System.Windows.Navigation;
 
 namespace OpenPanelApp.Views
 {
@@ -11,10 +10,8 @@ namespace OpenPanelApp.Views
             InitializeComponent();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void ApplicationBarMenuItem_Click(object sender, System.EventArgs e)
         {
-            base.OnNavigatedTo(e);
-
             ViewModel.Search();
         }
     }

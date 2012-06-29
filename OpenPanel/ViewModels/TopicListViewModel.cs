@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
-using Cirrious.MvvmCross.ViewModels;
-using OpenPanel.Models;
+using Cirrious.MvvmCross.Commands;
+using Cirrious.MvvmCross.Interfaces.Commands;
 using Newtonsoft.Json;
+using OpenPanel.Models;
 using OpenPanel.Services;
-
 
 namespace OpenPanel.ViewModels
 {
-    public class TopicListViewModel : MvxViewModel, IMvxServiceConsumer<IOpenPanelService>
+    public class TopicListViewModel : BaseViewModel
     {
         #region Properties
 
@@ -22,8 +20,8 @@ namespace OpenPanel.ViewModels
             set { isSearching = value; FirePropertyChanged("IsSearching"); }
         }
 
-        private List<Topic> topics;
-        public List<Topic> Topics
+        private List<TopicItemViewModel> topics;
+        public List<TopicItemViewModel> Topics
         {
             get { return topics; }
             set { topics = value; FirePropertyChanged("Topics"); }
@@ -31,9 +29,26 @@ namespace OpenPanel.ViewModels
 
         #endregion
 
+        #region Commands
+
+        public IMvxCommand SearchCommand
+        {
+            get
+            {
+                return new MvxRelayCommand(() =>
+                {
+                    Search();
+                });
+            }
+        }
+
+        #endregion
+
         public TopicListViewModel()
         {
-            topics = new List<Topic>();
+            topics = new List<TopicItemViewModel>();
+
+            Search();
         }
 
         public void Search()
@@ -51,23 +66,19 @@ namespace OpenPanel.ViewModels
 
         private void Error(Exception exception)
         {
-            IsSearching = false;
+            InvokeOnMainThread(() => { IsSearching = false; });
         }
 
         private void Success(IEnumerable<Topic> list)
         {
-            InvokeOnMainThread(() => DisplayTopics(list));
+            var topicViewModels = list.Select(t => new TopicItemViewModel(t)).ToList();
+            InvokeOnMainThread(() => DisplayTopics(topicViewModels));
         }
 
-        private void DisplayTopics(IEnumerable<Topic> list)
+        private void DisplayTopics(List<TopicItemViewModel> topicViewModels)
         {
             IsSearching = false;
-            Topics = list.ToList();
-        }
-
-        private IOpenPanelService OpenPanelService
-        {
-            get { return this.GetService<IOpenPanelService>(); }
+            Topics = topicViewModels;
         }
     }
 }

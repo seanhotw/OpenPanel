@@ -12,7 +12,7 @@ namespace OpenPanel
         public App()
         {
             InitializeAppContext();
-            InitializeOpenPanelService();
+            InitializeServices();
         }
 
         private void InitializeAppContext()
@@ -20,7 +20,7 @@ namespace OpenPanel
             this.RegisterServiceInstance<IMvxStartNavigation>(new AppContext());
         }
 
-        private void InitializeOpenPanelService()
+        private void InitializeServices()
         {
             this.RegisterServiceInstance<IOpenPanelService>(new OpenPanelService());
         }

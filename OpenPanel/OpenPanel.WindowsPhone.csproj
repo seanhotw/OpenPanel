@@ -44,7 +44,14 @@
     <Reference Include="Cirrious.MvvmCross.WindowsPhone">
       <HintPath>..\Libs\WindowsPhone\Cirrious.MvvmCross.WindowsPhone.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\WindowsPhone\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SignalR.Client.WP7">
+      <HintPath>..\Libs\WindowsPhone\SignalR.Client.WP7.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.WP71, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core" />
@@ -55,9 +62,16 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="AppContext.cs" />
-    <Compile Include="Models\Opinion.cs" />
+    <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IOpenPanelService.cs" />
+    <Compile Include="Services\OpenPanelService.cs" />
+    <Compile Include="ViewModels\AnswerItemViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\TopicDetailsViewModel.cs" />
+    <Compile Include="ViewModels\TopicItemViewModel.cs" />
     <Compile Include="ViewModels\TopicListViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />

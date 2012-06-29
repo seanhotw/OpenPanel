@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using Cirrious.MvvmCross.Core;
 using Newtonsoft.Json;
 using OpenPanel.Models;
 
@@ -33,6 +32,23 @@ namespace OpenPanel.Services
                     }
                 };
                 webClient.DownloadStringAsync(new Uri(ServiceBaseUrl + "/topics"));
+            }
+            catch (Exception ex)
+            {
+                error(ex);
+            }
+        }
+
+        public void VoteAsync(int answerId, Action success, Action<Exception> error)
+        {
+            try
+            {
+                var webClient = new WebClient();
+                webClient.UploadStringCompleted += (sender, e) =>
+                {
+                    success();
+                };
+                webClient.UploadStringAsync(new Uri(ServiceBaseUrl + "/answers/vote/" + answerId), "");
             }
             catch (Exception ex)
             {
