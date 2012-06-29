@@ -6,7 +6,7 @@ namespace OpenPanel.Models
     public class Topic
     {
         public string Question { get; set; }
-        public User CreatedBy { get; set; }
+        public User User { get; set; }
         public DateTime CreatedAt { get; set; }
         public List<Answer> Answers { get; set; }
 

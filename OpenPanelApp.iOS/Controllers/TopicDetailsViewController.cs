@@ -16,7 +16,6 @@ namespace OpenPanelApp
 
 		public TopicDetailsViewController (MvxShowViewModelRequest request) : base(request)
 		{
-
 		}
 
 		public override void LoadView ()
@@ -27,7 +26,7 @@ namespace OpenPanelApp
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
-			Title = ViewModel.Topic.CreatedBy.Name;
+			Title = ViewModel.Topic.User.Name;
 			TableView = new UITableView (RectangleF.Empty, UITableViewStyle.Grouped) {
 				Frame = this.ContentFrame()
 			};
@@ -109,7 +108,7 @@ namespace OpenPanelApp
 					switch (indexPath.Row) {
 					case 0:
 						cell.TextLabel.Text = "Name";
-						cell.DetailTextLabel.Text = ViewModel.Topic.CreatedBy.Name;
+						cell.DetailTextLabel.Text = ViewModel.Topic.User.Name;
 						break;
 					case 1:
 						cell.TextLabel.Text = "Created at";
@@ -125,7 +124,7 @@ namespace OpenPanelApp
 				case AnswersSection:
 					cell = MakeCellForAnswer (tableView, CreatorCellId);
 					cell.TextLabel.Text = ViewModel.Topic.Answers [indexPath.Row].Text;
-					cell.DetailTextLabel.Text = ViewModel.Topic.Answers [indexPath.Row].Votes.ToString ();
+					cell.DetailTextLabel.Text = ViewModel.Topic.Answers [indexPath.Row].Vote.ToString ();
 					break;
 				}
 

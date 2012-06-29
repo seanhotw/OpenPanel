@@ -32,7 +32,7 @@ namespace OpenPanel.ViewModels
 				return ans.Text == answer.Text;
 			});
 			if (result != null) {
-				result.Votes++;
+				result.Vote++;
 				Topic = topic;
 			}
 		}
