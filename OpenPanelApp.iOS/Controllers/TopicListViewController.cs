@@ -13,22 +13,22 @@ namespace OpenPanelApp
 	public class TopicListViewController : MvxTouchViewController<TopicListViewModel>
 	{
 		public UITableView TableView { get; set; }
+		public UIActivityIndicatorView ActivityIndicator { get; set; }
 
 		public TopicListViewController(MvxShowViewModelRequest request) : base(request)
 		{
 			Title = "Topics";
 		}
 
-		public override void ViewDidLoad()
+		public override void ViewDidLoad ()
 		{
-			base.ViewDidLoad();
+			base.ViewDidLoad ();
 
 			ViewModel.PropertyChanged += (sender, e) =>
 			{
-				if (e.PropertyName == "Topics")
-                {
+				if (e.PropertyName == "Topics") {
 					((TableSource)TableView.Source).Topics = ViewModel.Topics;
-					TableView.ReloadData();
+					TableView.ReloadData ();
 				}
 			};
 
@@ -39,6 +39,34 @@ namespace OpenPanelApp
                 Source = new TableSource(ViewModel.Topics)
             };
 			View.AddSubview (TableView);
+
+			// Activity Indicator
+			ActivityIndicator = makeActivityIndicator ();
+			this.View.AddSubview(ActivityIndicator);
+			if (ViewModel.IsSearching) {
+				ActivityIndicator.StartAnimating ();
+			}
+			ViewModel.PropertyChanged += (sender, e) =>
+			{
+				if (e.PropertyName == "IsSearching")
+                {
+					if (ViewModel.IsSearching) {
+						ActivityIndicator.StartAnimating();
+					}
+					else {
+						ActivityIndicator.StopAnimating();
+					}
+				}
+			};
+
+		}
+
+		private UIActivityIndicatorView makeActivityIndicator ()
+		{
+			UIActivityIndicatorView a = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.Gray);
+			a.Frame = TableView.Frame;
+			a.Tag = 1;
+			return a;
 		}
 
 		class TableSource : UITableViewSource
