@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using OpenPanel.Models;
+using SignalR.Client;
 using SignalR.Client.Hubs;
 
 namespace OpenPanel.ViewModels

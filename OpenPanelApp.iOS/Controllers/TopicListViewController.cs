@@ -14,36 +14,30 @@ namespace OpenPanelApp
 	{
 		public UITableView TableView { get; set; }
 
-		public TopicListViewController (MvxShowViewModelRequest request) : base(request)
+		public TopicListViewController(MvxShowViewModelRequest request) : base(request)
 		{
 			Title = "Topics";
 		}
 
-		public override void LoadView ()
+		public override void ViewDidLoad()
 		{
-			base.LoadView ();
-		}
+			base.ViewDidLoad();
 
-		public override void ViewDidLoad ()
-		{
-			base.ViewDidLoad ();
 			ViewModel.PropertyChanged += (sender, e) =>
 			{
-				if (e.PropertyName == "Topics") {
-					((TableSource)TableView.Source).ViewModel = ViewModel;
-					TableView.ReloadData ();
+				if (e.PropertyName == "Topics")
+                {
+					((TableSource)TableView.Source).Topics = ViewModel.Topics;
+					TableView.ReloadData();
 				}
 			};
-			ViewModel.Search ();
 
 			TableView = new UITableView (RectangleF.Empty, UITableViewStyle.Plain)
             {
                 Frame = this.ContentFrame(),
-                RowHeight = 60
+                RowHeight = 60,
+                Source = new TableSource(ViewModel.Topics)
             };
-			TableView.Source = new TableSource () {
-				ViewModel = this.ViewModel
-			};
 			View.AddSubview (TableView);
 		}
 
@@ -51,32 +45,33 @@ namespace OpenPanelApp
 		{
 			private static string CellId = "DefaultCellId";
 
-			public TopicListViewModel ViewModel {get; set;} 
+			public List<TopicItemViewModel> Topics {get; set;} 
 
-			public TableSource ()
+			public TableSource(List<TopicItemViewModel> topics)
 			{
+                Topics = topics;
 			}
 
 			public override int RowsInSection (UITableView tableview, int section)
 			{
-				return ViewModel.Topics.Count;
+				return Topics.Count;
 			}
 
 			public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
 			{
 				var cell = tableView.DequeueReusableCell (CellId) ?? new UITableViewCell (UITableViewCellStyle.Subtitle, CellId);
 
-				var topic = ViewModel.Topics [indexPath.Row];
+				var topic = Topics[indexPath.Row];
 
 				cell.TextLabel.Text = topic.Question;
-				cell.DetailTextLabel.Text = topic.User.Name;
+				cell.DetailTextLabel.Text = topic.User;
 				cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 				return cell;
 			}
 
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
-				ViewModel.SelectTopic(ViewModel.Topics[indexPath.Row]);
+                Topics[indexPath.Row].ViewDetailCommand.Execute();
 			}
 		}
 	}

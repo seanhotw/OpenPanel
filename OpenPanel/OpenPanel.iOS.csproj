@@ -37,8 +37,11 @@
     <Reference Include="CirriousMvvmCrossTouch">
       <HintPath>..\Libs\iOS\CirriousMvvmCrossTouch.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft_Json_MonoTouch">
-      <HintPath>..\Libs\iOS\Newtonsoft_Json_MonoTouch.dll</HintPath>
+    <Reference Include="SignalR.Client.MonoTouch">
+      <HintPath>..\Libs\iOS\SignalR.Client.MonoTouch.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Libs\iOS\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -57,5 +60,8 @@
     <Compile Include="ViewModels\TopicDetailsViewModel.cs" />
     <Compile Include="Services\OpenPanelService.cs" />
     <Compile Include="Services\IOpenPanelService.cs" />
+    <Compile Include="ViewModels\AnswerItemViewModel.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\TopicItemViewModel.cs" />
   </ItemGroup>
 </Project>
